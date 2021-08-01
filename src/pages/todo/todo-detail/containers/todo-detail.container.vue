@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <p v-if="isFetching">loading...</p>
-    <todo-detail-component v-else :todo="todo" />
-  </div>
+  <p v-if="isFetching">loading...</p>
+  <todo-detail-component v-else :todo="todo" />
 </template>
 <script lang="ts">
 import { defineComponent, computed, onMounted } from "@vue/composition-api";
