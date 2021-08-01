@@ -1,4 +1,5 @@
 import { Todo, TodoUpdateDto } from "@/models";
+import { todoService } from "@/services";
 import { Module } from "vuex";
 
 type TodoStore = {
@@ -40,7 +41,7 @@ const todoStore: Module<TodoStore, unknown> = {
 
     todo: (state) => {
       if (state.selectedId === null) return null;
-      return state.todos.find((todo) => todo.id === state.selectedId);
+      return state.todos.find((todo) => todo.id == state.selectedId) ?? null;
     },
   },
 
@@ -49,10 +50,7 @@ const todoStore: Module<TodoStore, unknown> = {
       try {
         commit(FETCH_ALL_REQUEST);
         // TODO: serviceでapi処理を書く
-        const result: Todo[] = [
-          { id: "1", title: "TestTitle1", context: "TestContext1" },
-          { id: "2", title: "TestTitle2", context: "TestContext2" },
-        ];
+        const result = await todoService.fetchAll();
         commit(FETCH_ALL_SUCCESS, result);
         return { todos: result };
       } catch (error) {
@@ -68,11 +66,7 @@ const todoStore: Module<TodoStore, unknown> = {
       try {
         const { id } = arg;
         commit(FETCH_REQUEST, id);
-        const result = {
-          id,
-          title: `fetch_${id}_title`,
-          context: `fetch_${id}_context`,
-        };
+        const result = await todoService.fetch(id);
         commit(FETCH_SUCCESS, result);
         return { todo: result };
       } catch (error) {
@@ -85,13 +79,9 @@ const todoStore: Module<TodoStore, unknown> = {
       arg: { id: string; todo: TodoUpdateDto }
     ) => {
       try {
-        const { id } = arg;
+        const { id, todo } = arg;
         commit(UPDATE_REQUEST);
-        const result = {
-          id,
-          title: `update_${id}_title`,
-          context: `update_${id}_context`,
-        };
+        const result = await todoService.update(id, todo);
         commit(UPDATE_SUCCESS, result);
         return { todo: result };
       } catch (error) {
@@ -103,11 +93,7 @@ const todoStore: Module<TodoStore, unknown> = {
       try {
         const { todo } = arg;
         commit(CREATE_REQUEST);
-        const result = {
-          id: todo.id,
-          title: `create_${todo.id}_title`,
-          context: `create_${todo.id}_context`,
-        };
+        const result = await todoService.create(todo);
         commit(CREATE_SUCCESS, todo);
         return { todo: result };
       } catch (error) {

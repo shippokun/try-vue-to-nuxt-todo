@@ -2,7 +2,7 @@
   <div>
     <h1>{{ todo.title }}</h1>
     <p>Id: {{ todo.id }}</p>
-    <p>Context: {{ todo.context }}</p>
+    <p>completed: {{ todo.completed }}</p>
   </div>
 </template>
 <script lang="ts">

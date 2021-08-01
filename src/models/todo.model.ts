@@ -1,8 +1,8 @@
 export type Todo = {
   id: string;
   title: string;
-  context: string;
+  completed: string;
 };
 
-export type TodoUpdateDto = Pick<Todo, "title" | "context">;
+export type TodoUpdateDto = Pick<Todo, "title" | "completed">;
 export type TodoCreateDto = TodoUpdateDto;
